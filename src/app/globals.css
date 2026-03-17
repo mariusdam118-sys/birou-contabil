@@ -1,26 +1,119 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --animate-fade-up: fadeUp 0.6s ease both;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  @keyframes fadeUp {
+    0%   { opacity: 0; transform: translateY(16px); }
+    100% { opacity: 1; transform: translateY(0); }
   }
 }
 
+:root {
+  --ink:      #1A1A18;
+  --ink-2:    #3A3A36;
+  --ink-3:    #6A6A64;
+  --ink-4:    #9A9A92;
+  --rule:     #DDDDD8;
+  --rule-lt:  #EDEDEA;
+  --bg:       #FFFFFF;
+  --bg-2:     #F8F8F6;
+  --warm:     #C8A96E;
+}
+
+html { scroll-behavior: smooth; }
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;       
+  line-height: 1.7;      
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+}
+
+.svc-card {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.svc-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.btn-dark {
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.btn-dark:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+.btn-dark:active {
+  transform: translateY(0px);
+  box-shadow: none;
+}
+
+
+.btn-outline {
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease, border-color 0.3s ease;
+  color: var(--ink); 
+}
+.btn-outline::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform: translateX(-101%);
+  transition: transform 0.3s ease;
+  z-index: 0;
+}
+.btn-outline:hover::before {
+  transform: translateX(0);
+}
+.btn-outline:hover {
+  color: white !important;
+  border-color: var(--ink);
+}
+.btn-outline span {
+  position: relative;
+  z-index: 1;
+}
+
+.nav-link {
+  position: relative;
+  padding-bottom: 2px;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 1px;
+  background: var(--ink);
+  transition: width 0.25s ease;
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+
+.link-warm {
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s ease;
+}
+.link-warm:hover {
+  text-decoration-color: var(--warm);
 }
