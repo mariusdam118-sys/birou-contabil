@@ -6,7 +6,7 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 export async function POST(request){
     try{
         const body = await request.json()
-        const {name, phone, service, message} = body
+        const {name, phone, email, service, message} = body
 
         if(!name || !phone || !email){
             return Response.json(
@@ -23,6 +23,14 @@ export async function POST(request){
             console.error('Supabase error:', dbError)
             return Response.json(
                 {error: 'Eroare la salvarea datelor.'},
+                {status: 500}
+            )
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!emailRegex.test(email)){
+            return Response.json(
+                {error: 'Email-ul nu este valid.'},
                 {status: 500}
             )
         }

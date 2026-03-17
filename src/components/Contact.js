@@ -87,7 +87,20 @@ export default function Contact() {
 
   const handleSubmit = async(e) => {
     e.preventDefault()
+  
+    if (!formData.name.trim() || !formData.phone.trim() || !formData.email.trim()) {
+      alert('Te rugăm să completezi toate câmpurile obligatorii (nume, telefon, email)')
+      return
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(formData.email)) {
+      alert('Te rugăm să introduci o adresă de email validă')
+      return
+    }
+
     setSubmitted('loading')
+    
     try{
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -99,7 +112,7 @@ export default function Contact() {
 
       if(response.ok){
         setSubmitted('success')
-        setFormData({name: '', phone:'', email: '', services: '', message: ''})
+        setFormData({name: '', phone: '', email: '', service: '', message: ''})
       }
       else{
         setSubmitted('error')
@@ -271,11 +284,18 @@ export default function Contact() {
                 </p>
                 <button
                   type="submit"
-                  className={`btn-dark text-sm font-semibold px-8 py-3 text-white transition-all ${
-                    submitted ? 'bg-green-700' : 'bg-(--ink)'
+                  disabled={submitted === 'loading'}
+                  className={`btn-dark text-sm font-semibold px-8 py-3 text-white transition-all min-w-40 ${
+                    submitted === 'success' ? 'bg-green-700' :
+                    submitted === 'error' ? 'bg-red-600' :
+                    submitted === 'loading' ? 'bg-amber-600 cursor-wait' :
+                    'bg-(--ink) hover:bg-(--ink-2)'
                   }`}
                 >
-                  {submitted ? 'Mesaj trimis ✓' : 'Trimite cererea'}
+                  {submitted === 'loading' ? 'Se trimite...' :
+                  submitted === 'success' ? 'Mesaj trimis ✓' :
+                  submitted === 'error' ? 'Eroare! Încearcă din nou' :
+                  'Trimite cererea'}
                 </button>
               </div>
 
