@@ -29,28 +29,33 @@ function IbanRow({ currency, iban }) {
 
   return (
     <button
+      type="button"
       onClick={handleCopy}
-      className={`w-full flex gap-3 items-baseline px-4 py-3 border-b border-(--rule-lt) last:border-b-0 cursor-pointer transition-all duration-200 text-left group ${
-        copied ? 'bg-green-50' : 'bg-white hover:bg-(--bg-2)'
+      className={`w-full flex gap-3 items-baseline px-4 py-3 border-b border-black/[0.06] last:border-b-0 cursor-pointer transition-all duration-200 text-left group ${
+        copied ? 'bg-emerald-50' : 'bg-white hover:bg-[#f8f9fb]'
       }`}
       title={`Click pentru a copia ${currency} IBAN`}
     >
-      <span className={`font-serif text-[11px] min-w-8 transition-colors duration-200 ${
-        copied ? 'text-green-700' : 'text-(--ink-4)'
-      }`}>
+      <span
+        className={`font-serif text-[11px] min-w-8 transition-colors duration-200 ${
+          copied ? 'text-emerald-700' : 'text-(--muted)'
+        }`}
+      >
         {currency}
       </span>
-      <span className={`font-serif text-[13px] tracking-wide flex-1 transition-colors duration-200 ${
-        copied ? 'text-green-700' : 'text-(--ink-2) group-hover:text-(--ink)'
-      }`}>
+      <span
+        className={`font-serif text-[13px] tracking-wide flex-1 transition-colors duration-200 ${
+          copied ? 'text-emerald-700' : 'text-(--navy-mid) group-hover:text-(--navy-deep)'
+        }`}
+      >
         {iban}
       </span>
-      <span className={`text-[11px] font-semibold tracking-wide transition-all duration-200 ${
-        copied
-          ? 'text-green-700 opacity-100'
-          : 'text-(--ink-4) opacity-0 group-hover:opacity-100'
-      }`}>
-        {copied ? 'Copiat ✓' : 'Click pentru copiere'}
+      <span
+        className={`text-[11px] font-semibold tracking-wide transition-all duration-200 ${
+          copied ? 'text-emerald-700 opacity-100' : 'text-(--muted) opacity-0 group-hover:opacity-100'
+        }`}
+      >
+        {copied ? 'Copiat ✓' : 'Copiere'}
       </span>
     </button>
   )
@@ -59,7 +64,11 @@ function IbanRow({ currency, iban }) {
 export default function Contact() {
   const sectionRef = useRef(null)
   const [formData, setFormData] = useState({
-    name: '', phone: '', email: '', service: '', message: '',
+    name: '',
+    phone: '',
+    email: '',
+    service: '',
+    message: '',
   })
   const [submitted, setSubmitted] = useState(false)
 
@@ -85,9 +94,9 @@ export default function Contact() {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-  
+
     if (!formData.name.trim() || !formData.phone.trim() || !formData.email.trim()) {
       alert('Te rugăm să completezi toate câmpurile obligatorii (nume, telefon, email)')
       return
@@ -100,25 +109,24 @@ export default function Contact() {
     }
 
     setSubmitted('loading')
-    
-    try{
+
+    try {
       const response = await fetch('/api/contact', {
         method: 'POST',
-        headers: {'Content-type': 'application/json'},
+        headers: { 'Content-type': 'application/json' },
         body: JSON.stringify(formData),
       })
 
       const data = await response.json()
 
-      if(response.ok){
+      if (response.ok) {
         setSubmitted('success')
-        setFormData({name: '', phone: '', email: '', service: '', message: ''})
-      }
-      else{
+        setFormData({ name: '', phone: '', email: '', service: '', message: '' })
+      } else {
         setSubmitted('error')
         console.error(data.error)
       }
-    } catch(error){
+    } catch (error) {
       setSubmitted('error')
       console.error(error)
     }
@@ -127,32 +135,26 @@ export default function Contact() {
   }
 
   return (
-    <section
-      id="contact"
-      ref={sectionRef}
-      className="py-24 bg-(--bg-2) border-b border-(--rule)"
-    >
-      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-16 lg:gap-24 items-start">
-
-        {/* Coloana stângă — detalii */}
+    <section id="contact" ref={sectionRef} className="py-20 md:py-28 bg-white border-b border-black/[0.06]">
+      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-14 lg:gap-20 items-start">
         <div className="reveal-item">
-          <span className="flex items-center gap-3 text-[11px] font-semibold tracking-widest uppercase text-(--ink-4) mb-4">
-            <span className="block w-5 h-px bg-(--warm)" />
+          <span className="flex items-center gap-3 text-[11px] font-semibold tracking-[0.28em] uppercase text-(--accent-soft) mb-4">
+            <span className="block w-6 h-px bg-(--accent-soft)" aria-hidden />
             Contact
           </span>
-          <h2 className="font-serif font-normal text-[clamp(26px,3.5vw,42px)] tracking-tight text-(--ink) mb-10">
+          <h2 className="font-serif font-normal text-[clamp(1.75rem,3.5vw,2.4rem)] tracking-tight text-(--navy) mb-10">
             Hai să discutăm
           </h2>
 
           <dl className="space-y-6 mb-10">
             {contactDetails.map((detail) => (
               <div key={detail.label}>
-                <dt className="text-[11px] font-semibold tracking-widest uppercase text-(--ink-4) mb-1">
+                <dt className="text-[11px] font-semibold tracking-[0.2em] uppercase text-(--muted) mb-1">
                   {detail.label}
                 </dt>
-                <dd className="text-[15px] text-(--ink) leading-relaxed whitespace-pre-line">
+                <dd className="text-[15px] text-(--navy-mid) leading-relaxed whitespace-pre-line">
                   {detail.href ? (
-                    <a href={detail.href} className="link-warm no-underline">
+                    <a href={detail.href} className="link-accent text-(--navy-deep) no-underline font-medium">
                       {detail.value}
                     </a>
                   ) : (
@@ -160,9 +162,8 @@ export default function Contact() {
                   )}
                 </dd>
 
-                {/* Harta apare doar sub Adresă */}
                 {detail.label === 'Adresă' && (
-                  <div className="mt-4 border border-(--rule) overflow-hidden">
+                  <div className="mt-4 border border-black/[0.08] overflow-hidden rounded-sm">
                     <iframe
                       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2849.019227873178!2d26.167798076239215!3d44.43276780166357!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40b1f94caadca921%3A0x6fbc87f02aa1d7f8!2sAleea%20Barajul%20Iezeru%206A!5e0!3m2!1sro!2snl!4v1773708201276!5m2!1sro!2snl"
                       width="100%"
@@ -173,11 +174,11 @@ export default function Contact() {
                       referrerPolicy="no-referrer-when-downgrade"
                       title="Locație Biroul Contabil"
                     />
-                    
-                     <a href="https://maps.google.com/?q=Aleea+Barajul+Iezeru+6A+Sector+3+Bucuresti"
+                    <a
+                      href="https://maps.google.com/?q=Aleea+Barajul+Iezeru+6A+Sector+3+Bucuresti"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-between px-4 py-2 bg-(--bg-2) border-t border-(--rule) text-[12px] text-(--ink-3) hover:text-(--ink) hover:bg-(--bg-3) transition-colors no-underline group"
+                      className="flex items-center justify-between px-4 py-2.5 bg-(--surface) border-t border-black/[0.06] text-[12px] text-(--muted) hover:text-(--navy) transition-colors no-underline group"
                     >
                       <span>Deschide în Google Maps</span>
                       <span className="transition-transform group-hover:translate-x-1 duration-200">→</span>
@@ -188,71 +189,90 @@ export default function Contact() {
             ))}
           </dl>
 
-          {/* IBAN cu copy on click */}
-          <div className="border border-(--rule) overflow-hidden">
-            <span className="block text-[11px] font-semibold tracking-widest uppercase text-(--ink-4) px-4 py-3 border-b border-(--rule) bg-(--bg-2)">
+          <div className="border border-black/[0.08] overflow-hidden rounded-sm">
+            <span className="block text-[11px] font-semibold tracking-[0.2em] uppercase text-(--muted) px-4 py-3 border-b border-black/[0.06] bg-(--surface)">
               Date bancare
             </span>
             {ibanDetails.map((item) => (
-              <IbanRow
-                key={item.currency}
-                currency={item.currency}
-                iban={item.iban}
-              />
+              <IbanRow key={item.currency} currency={item.currency} iban={item.iban} />
             ))}
           </div>
         </div>
 
-        {/* Coloana dreaptă — formular */}
-        <div className="reveal-item" style={{ transitionDelay: '120ms' }}>
-          <div className="bg-white border border-(--rule) p-10">
+        <div className="reveal-item" style={{ transitionDelay: '100ms' }}>
+          <div className="bg-(--surface) border border-black/[0.08] p-8 md:p-10 rounded-sm">
             <form onSubmit={handleSubmit} noValidate>
-
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label htmlFor="name" className="block text-[11px] font-semibold tracking-widest uppercase text-(--ink-4) mb-2">
+                  <label
+                    htmlFor="name"
+                    className="block text-[11px] font-semibold tracking-[0.2em] uppercase text-(--muted) mb-2"
+                  >
                     Nume și prenume *
                   </label>
                   <input
-                    id="name" name="name" type="text"
-                    value={formData.name} onChange={handleChange}
-                    placeholder="Ion Popescu" required
-                    className="w-full text-[15px] text-(--ink) bg-(--bg-2) border border-(--rule) px-4 py-3 outline-none focus:border-(--ink-3) focus:bg-white transition-colors"
+                    id="name"
+                    name="name"
+                    type="text"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Ion Popescu"
+                    required
+                    className="w-full text-[15px] text-(--navy-deep) bg-white border border-black/[0.1] px-4 py-3 outline-none focus:border-(--blue-soft) focus:ring-1 focus:ring-(--blue-soft)/30 transition-colors rounded-sm"
                   />
                 </div>
                 <div>
-                  <label htmlFor="phone" className="block text-[11px] font-semibold tracking-widest uppercase text-(--ink-4) mb-2">
+                  <label
+                    htmlFor="phone"
+                    className="block text-[11px] font-semibold tracking-[0.2em] uppercase text-(--muted) mb-2"
+                  >
                     Telefon *
                   </label>
                   <input
-                    id="phone" name="phone" type="tel"
-                    value={formData.phone} onChange={handleChange}
-                    placeholder="07xx xxx xxx" required
-                    className="w-full text-[15px] text-(--ink) bg-(--bg-2) border border-(--rule) px-4 py-3 outline-none focus:border-(--ink-3) focus:bg-white transition-colors"
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="07xx xxx xxx"
+                    required
+                    className="w-full text-[15px] text-(--navy-deep) bg-white border border-black/[0.1] px-4 py-3 outline-none focus:border-(--blue-soft) focus:ring-1 focus:ring-(--blue-soft)/30 transition-colors rounded-sm"
                   />
                 </div>
               </div>
 
               <div className="mb-4">
-                <label htmlFor="email" className="block text-[11px] font-semibold tracking-widest uppercase text-(--ink-4) mb-2">
+                <label
+                  htmlFor="email"
+                  className="block text-[11px] font-semibold tracking-[0.2em] uppercase text-(--muted) mb-2"
+                >
                   Adresă email *
                 </label>
                 <input
-                  id="email" name="email" type="email"
-                  value={formData.email} onChange={handleChange}
-                  placeholder="email@firma.ro" required
-                  className="w-full text-[15px] text-(--ink) bg-(--bg-2) border border-(--rule) px-4 py-3 outline-none focus:border-(--ink-3) focus:bg-white transition-colors"
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="email@firma.ro"
+                  required
+                  className="w-full text-[15px] text-(--navy-deep) bg-white border border-black/[0.1] px-4 py-3 outline-none focus:border-(--blue-soft) focus:ring-1 focus:ring-(--blue-soft)/30 transition-colors rounded-sm"
                 />
               </div>
 
               <div className="mb-4">
-                <label htmlFor="service" className="block text-[11px] font-semibold tracking-widest uppercase text-(--ink-4) mb-2">
+                <label
+                  htmlFor="service"
+                  className="block text-[11px] font-semibold tracking-[0.2em] uppercase text-(--muted) mb-2"
+                >
                   Serviciu solicitat
                 </label>
                 <select
-                  id="service" name="service"
-                  value={formData.service} onChange={handleChange}
-                  className="w-full text-[15px] text-(--ink) bg-(--bg-2) border border-(--rule) px-4 py-3 outline-none focus:border-(--ink-3) focus:bg-white transition-colors appearance-none"
+                  id="service"
+                  name="service"
+                  value={formData.service}
+                  onChange={handleChange}
+                  className="w-full text-[15px] text-(--navy-deep) bg-white border border-black/[0.1] px-4 py-3 outline-none focus:border-(--blue-soft) focus:ring-1 focus:ring-(--blue-soft)/30 transition-colors appearance-none rounded-sm"
                 >
                   <option value="">Alege un serviciu...</option>
                   <option>Contabilitate financiară</option>
@@ -266,43 +286,52 @@ export default function Contact() {
               </div>
 
               <div className="mb-6">
-                <label htmlFor="message" className="block text-[11px] font-semibold tracking-widest uppercase text-(--ink-4) mb-2">
+                <label
+                  htmlFor="message"
+                  className="block text-[11px] font-semibold tracking-[0.2em] uppercase text-(--muted) mb-2"
+                >
                   Mesaj
                 </label>
                 <textarea
-                  id="message" name="message"
-                  value={formData.message} onChange={handleChange}
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
                   placeholder="Descrie pe scurt tipul firmei, domeniul de activitate și necesitățile tale..."
                   rows={4}
-                  className="w-full text-[15px] text-(--ink) bg-(--bg-2) border border-(--rule) px-4 py-3 outline-none focus:border-(--ink-3) focus:bg-white transition-colors resize-none"
+                  className="w-full text-[15px] text-(--navy-deep) bg-white border border-black/[0.1] px-4 py-3 outline-none focus:border-(--blue-soft) focus:ring-1 focus:ring-(--blue-soft)/30 transition-colors resize-none rounded-sm"
                 />
               </div>
 
               <div className="flex justify-between items-center gap-4 flex-wrap">
-                <p className="text-[12px] text-(--ink-4) leading-relaxed max-w-60">
+                <p className="text-[12px] text-(--muted) leading-relaxed max-w-60">
                   Câmpurile cu * sunt obligatorii. Datele tale sunt confidențiale.
                 </p>
                 <button
                   type="submit"
                   disabled={submitted === 'loading'}
-                  className={`btn-dark text-sm font-semibold px-8 py-3 text-white transition-all min-w-40 ${
-                    submitted === 'success' ? 'bg-green-700' :
-                    submitted === 'error' ? 'bg-red-600' :
-                    submitted === 'loading' ? 'bg-amber-600 cursor-wait' :
-                    'bg-(--ink) hover:bg-(--ink-2)'
+                  className={`btn-accent text-sm font-semibold px-8 py-3.5 text-white transition-all min-w-40 rounded-sm ${
+                    submitted === 'success'
+                      ? 'bg-emerald-700 hover:brightness-100'
+                      : submitted === 'error'
+                        ? 'bg-red-600 hover:brightness-100'
+                        : submitted === 'loading'
+                          ? 'bg-amber-600 cursor-wait'
+                          : 'bg-(--navy) hover:bg-(--navy-deep)'
                   }`}
                 >
-                  {submitted === 'loading' ? 'Se trimite...' :
-                  submitted === 'success' ? 'Mesaj trimis ✓' :
-                  submitted === 'error' ? 'Eroare! Încearcă din nou' :
-                  'Trimite cererea'}
+                  {submitted === 'loading'
+                    ? 'Se trimite...'
+                    : submitted === 'success'
+                      ? 'Mesaj trimis ✓'
+                      : submitted === 'error'
+                        ? 'Eroare! Încearcă din nou'
+                        : 'Trimite cererea'}
                 </button>
               </div>
-
             </form>
           </div>
         </div>
-
       </div>
     </section>
   )

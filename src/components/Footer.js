@@ -1,68 +1,45 @@
-import Link from 'next/link'
-
 const serviceLinks = [
   'Contabilitate financiară',
   'Salarizare & Personal',
   'Consultanță fiscală',
-  'Înființări de firme',
-  'Expertiză contabilă',
-  'Asistență ANAF & ITM',
 ]
 
 const companyLinks = [
   { label: 'Despre noi', href: '#about' },
   { label: 'Cum lucrăm', href: '#process' },
   { label: 'Contact', href: '#contact' },
-  { label: 'Politică confidențialitate', href: '#' },
-  { label: 'Termeni și condiții', href: '#' },
 ]
+
+const accreditations = ['CECCAR', 'CAFR', 'ANAF']
 
 export default function Footer() {
   return (
-    <footer className="bg-(--ink)" role="contentinfo">
-
-      {/* ── Top ── */}
-      <div className="max-w-6xl mx-auto px-6 pt-16 pb-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[280px_1fr_1fr] gap-12 border-b border-white/10">
-
-        {/* Brand */}
-        <div>
-          <div className="font-serif text-[20px] text-white/85 mb-3">
-            Biroul <strong>Contabil</strong>
-          </div>
-          <p className="text-[13px] text-white/30 leading-relaxed mb-6">
+    <footer className="bg-(--navy-deep) text-white" role="contentinfo">
+      <div className="max-w-6xl mx-auto px-6 pt-16 pb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-10 border-b border-white/10">
+        <div className="sm:col-span-2 lg:col-span-1">
+          <div className="font-serif text-[1.35rem] text-white/95 mb-3">Biroul Contabil</div>
+          <p className="text-[13px] text-(--muted) leading-relaxed mb-6 max-w-xs">
             Contabilitate, fiscalitate și consultanță pentru afaceri serioase. Sector 3, București.
           </p>
-          {/* Contact rapid */}
-          <div className="space-y-2">
+          <div>
+            <span className="text-[10px] font-semibold tracking-[0.25em] uppercase text-white/35 block mb-1">
+              Tel
+            </span>
             <a
               href="tel:+40725316318"
-              className="flex items-center gap-2 text-[13px] text-white/40 hover:text-white/80 transition-colors no-underline"
+              className="text-[14px] text-white/80 hover:text-white transition-colors no-underline"
             >
-              <span className="text-[10px] font-semibold tracking-widest uppercase text-white/20">Tel</span>
               (+40) 725.316.318
-            </a>
-            <a
-              href="mailto:office@biroulcontabil.ro"
-              className="flex items-center gap-2 text-[13px] text-white/40 hover:text-white/80 transition-colors no-underline"
-            >
-              <span className="text-[10px] font-semibold tracking-widest uppercase text-white/20">Email</span>
-              office@biroulcontabil.ro
             </a>
           </div>
         </div>
 
-        {/* Servicii */}
-        <nav aria-label="Linkuri servicii">
-          <h5 className="text-[11px] font-semibold tracking-widest uppercase text-white/25 mb-5">
-            Servicii
-          </h5>
-          <ul className="list-none space-y-3">
+        <nav aria-label="Servicii">
+          <h2 className="text-[11px] font-semibold tracking-[0.25em] uppercase text-white/40 mb-5">Servicii</h2>
+          <ul className="list-none space-y-3 m-0 p-0">
             {serviceLinks.map((item) => (
               <li key={item}>
-                <a
-                  href="#services"
-                  className="text-[14px] text-white/45 hover:text-white/85 transition-colors no-underline"
-                >
+                <a href="#services" className="text-[14px] text-(--muted) hover:text-white transition-colors no-underline">
                   {item}
                 </a>
               </li>
@@ -70,55 +47,47 @@ export default function Footer() {
           </ul>
         </nav>
 
-        {/* Companie */}
-        <nav aria-label="Linkuri companie">
-          <h5 className="text-[11px] font-semibold tracking-widest uppercase text-white/25 mb-5">
-            Companie
-          </h5>
-          <ul className="list-none space-y-3">
+        <nav aria-label="Companie">
+          <h2 className="text-[11px] font-semibold tracking-[0.25em] uppercase text-white/40 mb-5">Companie</h2>
+          <ul className="list-none space-y-3 m-0 p-0">
             {companyLinks.map((item) => (
               <li key={item.label}>
-                <a
-                  href={item.href}
-                  className="text-[14px] text-white/45 hover:text-white/85 transition-colors no-underline"
-                >
+                <a href={item.href} className="text-[14px] text-(--muted) hover:text-white transition-colors no-underline">
                   {item.label}
                 </a>
               </li>
             ))}
           </ul>
-
-          {/* CTA în footer */}
-          <div className="mt-8 pt-8 border-t border-white/10">
-            <a
-              href="#contact"
-              className="inline-block text-[13px] font-semibold text-(--ink) bg-(--warm) px-5 py-3 hover:brightness-110 transition-all no-underline"
-            >
-              Solicită ofertă gratuită →
-            </a>
-          </div>
         </nav>
 
+        <div>
+          <h2 className="text-[11px] font-semibold tracking-[0.25em] uppercase text-white/40 mb-5">Acreditări</h2>
+          <ul className="list-none space-y-3 m-0 p-0">
+            {accreditations.map((item) => (
+              <li key={item} className="text-[14px] text-(--muted)">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
-      {/* ── Bottom ── */}
-      <div className="max-w-6xl mx-auto px-6 py-5 flex flex-wrap justify-between items-center gap-4">
-        <span className="text-[12px] text-white/20">
+      <div className="max-w-6xl mx-auto px-6 py-6 flex flex-wrap justify-between items-center gap-4">
+        <span className="text-[12px] text-white/35">
           © {new Date().getFullYear()} Biroul Contabil. Toate drepturile rezervate.
         </span>
-        <div className="flex gap-6">
+        <div className="flex gap-6 flex-wrap">
           {['Politică cookies', 'GDPR', 'ANPC'].map((item) => (
             <a
               key={item}
               href="#"
-              className="text-[12px] text-white/20 hover:text-white/50 transition-colors no-underline"
+              className="text-[12px] text-white/35 hover:text-white/60 transition-colors no-underline"
             >
               {item}
             </a>
           ))}
         </div>
       </div>
-
     </footer>
   )
 }
