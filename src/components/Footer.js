@@ -1,8 +1,8 @@
-const serviceLinks = [
-  'Contabilitate financiară',
-  'Salarizare & Personal',
-  'Consultanță fiscală',
-]
+'use client'
+
+import Link from 'next/link';
+
+const serviceLinks = ['Contabilitate financiară', 'Salarizare & Personal', 'Consultanță fiscală']
 
 const companyLinks = [
   { label: 'Despre noi', href: '#about' },
@@ -10,82 +10,93 @@ const companyLinks = [
   { label: 'Contact', href: '#contact' },
 ]
 
-const accreditations = ['CECCAR', 'CAFR', 'ANAF']
+const accreditations = ['CECCAR', 'CCF - Camera Consultanților Fiscali', 'ANAF']
 
 export default function Footer() {
   return (
-    <footer className="bg-(--navy-deep) text-white" role="contentinfo">
-      <div className="max-w-6xl mx-auto px-6 pt-16 pb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-10 border-b border-white/10">
-        <div className="sm:col-span-2 lg:col-span-1">
-          <div className="font-serif text-[1.35rem] text-white/95 mb-3">Biroul Contabil</div>
-          <p className="text-[13px] text-(--muted) leading-relaxed mb-6 max-w-xs">
-            Contabilitate, fiscalitate și consultanță pentru afaceri serioase. Sector 3, București.
-          </p>
+    <footer className="bg-base border-t border-slate-100" role="contentinfo">
+      <div className="max-w-7xl mx-auto px-6 pt-24 pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-24 mb-24">
+          <div className="lg:col-span-1">
+            <div className="text-3xl font-black text-text-navy mb-8">
+              Birou<span className="text-primary-blue">.</span>
+            </div>
+            <p className="text-lg text-text-muted leading-relaxed mb-10 max-w-xs font-medium">
+              Expertiză contabilă de elită pentru afaceri care vizează excelența în era digitală.
+            </p>
+            <div className="space-y-4">
+              <span className="text-xs font-black tracking-[0.3em] uppercase text-text-muted/40 block">Contact Direct</span>
+              <a
+                href="tel:+40722802121"
+                className="text-2xl font-black text-primary-blue hover:text-accent-orange transition-all no-underline"
+              >
+                0722 802 121
+              </a>
+            </div>
+          </div>
+
+          <nav aria-label="Servicii">
+            <h2 className="text-xs font-black tracking-[0.3em] uppercase text-text-muted/40 mb-8">Expertiză</h2>
+            <ul className="list-none space-y-4 m-0 p-0">
+              {serviceLinks.map((item) => (
+                <li key={item}>
+                  <a
+                    href="#services"
+                    className="text-lg font-bold text-text-navy hover:text-primary-blue transition-all no-underline"
+                  >
+                    {item}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <nav aria-label="Companie">
+            <h2 className="text-xs font-black tracking-[0.3em] uppercase text-text-muted/40 mb-8">Companie</h2>
+            <ul className="list-none space-y-4 m-0 p-0">
+              {companyLinks.map((item) => (
+                <li key={item.label}>
+                  <a
+                    href={item.href}
+                    className="text-lg font-bold text-text-navy hover:text-primary-blue transition-all no-underline"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
           <div>
-            <span className="text-[10px] font-semibold tracking-[0.25em] uppercase text-white/35 block mb-1">
-              Tel
-            </span>
-            <a
-              href="tel:+40725316318"
-              className="text-[14px] text-white/80 hover:text-white transition-colors no-underline"
-            >
-              (+40) 725.316.318
-            </a>
+            <h2 className="text-xs font-black tracking-[0.3em] uppercase text-text-muted/40 mb-8">Acreditări</h2>
+            <div className="flex flex-wrap gap-3">
+              {accreditations.map((item) => (
+                <span key={item} className="px-4 py-2 bg-slate-50 text-text-navy text-xs font-black uppercase tracking-widest rounded-lg border border-slate-100">
+                  {item}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
 
-        <nav aria-label="Servicii">
-          <h2 className="text-[11px] font-semibold tracking-[0.25em] uppercase text-white/40 mb-5">Servicii</h2>
-          <ul className="list-none space-y-3 m-0 p-0">
-            {serviceLinks.map((item) => (
-              <li key={item}>
-                <a href="#services" className="text-[14px] text-(--muted) hover:text-white transition-colors no-underline">
-                  {item}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <nav aria-label="Companie">
-          <h2 className="text-[11px] font-semibold tracking-[0.25em] uppercase text-white/40 mb-5">Companie</h2>
-          <ul className="list-none space-y-3 m-0 p-0">
-            {companyLinks.map((item) => (
-              <li key={item.label}>
-                <a href={item.href} className="text-[14px] text-(--muted) hover:text-white transition-colors no-underline">
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div>
-          <h2 className="text-[11px] font-semibold tracking-[0.25em] uppercase text-white/40 mb-5">Acreditări</h2>
-          <ul className="list-none space-y-3 m-0 p-0">
-            {accreditations.map((item) => (
-              <li key={item} className="text-[14px] text-(--muted)">
+        <div className="pt-12 border-t border-slate-100 flex flex-wrap justify-between items-center gap-8">
+          <span className="text-sm font-bold text-text-muted/60">
+            <Link href="/admin" className="hover:text-primary-blue transition-colors no-underline">
+              ©
+            </Link>{' '}
+            {new Date().getFullYear()} Birou. Toate drepturile rezervate.
+          </span>
+          <div className="flex gap-10 flex-wrap">
+            {['Politică cookies', 'GDPR', 'ANPC'].map((item) => (
+              <a
+                key={item}
+                href="#"
+                className="text-sm font-bold text-text-muted/60 hover:text-primary-blue transition-all no-underline"
+              >
                 {item}
-              </li>
+              </a>
             ))}
-          </ul>
-        </div>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-6 py-6 flex flex-wrap justify-between items-center gap-4">
-        <span className="text-[12px] text-white/35">
-          © {new Date().getFullYear()} Biroul Contabil. Toate drepturile rezervate.
-        </span>
-        <div className="flex gap-6 flex-wrap">
-          {['Politică cookies', 'GDPR', 'ANPC'].map((item) => (
-            <a
-              key={item}
-              href="#"
-              className="text-[12px] text-white/35 hover:text-white/60 transition-colors no-underline"
-            >
-              {item}
-            </a>
-          ))}
+          </div>
         </div>
       </div>
     </footer>

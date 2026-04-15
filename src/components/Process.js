@@ -33,7 +33,7 @@ export default function Process() {
   const sectionRef = useRef(null)
 
   useEffect(() => {
-    const elements = sectionRef.current?.querySelectorAll('.reveal-item')
+    const elements = sectionRef.current?.querySelectorAll('.reveal-on-scroll')
     if (!elements) return
     const observer = new IntersectionObserver(
       (entries) => {
@@ -51,30 +51,36 @@ export default function Process() {
   }, [])
 
   return (
-    <section id="process" ref={sectionRef} className="py-20 md:py-28 bg-(--surface) border-b border-black/[0.06]">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="mb-12 md:mb-14 reveal-item">
-          <span className="flex items-center gap-3 text-[11px] font-semibold tracking-[0.28em] uppercase text-(--accent-soft) mb-4">
-            <span className="block w-6 h-px bg-(--accent-soft)" aria-hidden />
-            Cum lucrăm
-          </span>
-          <h2 className="font-serif font-normal text-[clamp(1.75rem,3.5vw,2.4rem)] tracking-tight text-(--navy)">
-            Procesul de colaborare
-          </h2>
+    <section id="process" ref={sectionRef} className="py-32 bg-base">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-24 reveal-on-scroll">
+          <div className="max-w-3xl">
+            <div className="pill-badge mb-6">Workflow</div>
+            <h2 className="text-[clamp(2.5rem,6vw,4.5rem)] text-text-navy leading-none tracking-tight">
+              Cum transformăm <br />
+              <span className="text-primary-blue">viziunea în realitate.</span>
+            </h2>
+          </div>
+          <p className="text-xl text-text-muted max-w-sm font-medium leading-snug">
+            Un proces transparent și eficient, adaptat nevoilor tale specifice.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border border-black/[0.08] border-r-0 bg-white">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {steps.map((step, index) => (
             <div
               key={step.number}
-              className="reveal-item border-r border-b border-black/[0.08] lg:border-b-0 p-7 md:p-8 hover:bg-[#fafbfc] transition-colors relative"
-              style={{ transitionDelay: `${index * 80}ms` }}
+              className="reveal-on-scroll group"
+              style={{ transitionDelay: `${index * 100}ms` }}
             >
-              <span className="block font-serif text-[11px] font-bold text-black/20 tracking-widest mb-4">
-                {step.number}
-              </span>
-              <h3 className="font-serif text-[17px] text-(--navy) font-semibold mb-3">{step.title}</h3>
-              <p className="text-[14px] text-[#4b5563] leading-relaxed">{step.description}</p>
+              <div className="relative mb-8">
+                <span className="text-6xl font-black text-primary-blue/5 group-hover:text-primary-blue/10 transition-colors">
+                  {step.number}
+                </span>
+                <div className="absolute bottom-2 left-0 w-12 h-1 bg-accent-mustard group-hover:w-full transition-all duration-500" />
+              </div>
+              <h3 className="text-2xl font-extrabold text-text-navy mb-4">{step.title}</h3>
+              <p className="text-lg text-text-muted leading-relaxed">{step.description}</p>
             </div>
           ))}
         </div>

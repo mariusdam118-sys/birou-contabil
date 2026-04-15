@@ -2,102 +2,137 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
-const navLinks = ['Servicii', 'Despre noi', 'Cum lucrăm', 'Contact']
+const navLinks = [
+  { label: 'Servicii', href: '#services' },
+  { label: 'Despre noi', href: '#about' },
+  { label: 'Cum lucrăm', href: '#process' },
+  { label: 'Contact', href: '#contact' },
+]
 
 export default function Header() {
-  const [scrolled, setIsScrolled] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 10)
+    const onScroll = () => setScrolled(window.scrollY > 24)
     window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Închide meniul când dai click pe un link
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
+
   const closeMenu = () => setIsOpen(false)
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-(--rule) transition-shadow duration-300 ${scrolled ? 'shadow-sm' : ''}`}>
-
-      {/* ── Bara principală ── */}
-      <div className="max-w-6xl mx-auto px-6 h-17 flex items-center justify-between">
-
-        {/* Logo */}
-        <Link href="/" className="font-serif text-[27px] text-(--ink) no-underline">
-          Birou <strong>Contabil</strong>
-        </Link>
-
-        {/* Linkuri desktop — ascunse pe mobile */}
-        <nav aria-label="Navigare principala" className="hidden md:block">
-          <ul className="flex items-center gap-8 list-none">
-            {navLinks.map((item) => (
-              <li key={item}>
-                <Link
-                  href={`#${item.toLowerCase().replace(' ', '-')}`}
-                  className="nav-link text-sm text-(--ink-3) hover:text-(--ink) transition-colors no-underline"
-                >
-                  {item}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Link
-                href="#contact"
-                className="text-sm font-semibold bg-(--ink) text-white px-5 py-2 hover:bg-(--ink-2) transition-colors no-underline"
-              >
-                Solicită ofertă
-              </Link>
-            </li>
-          </ul>
-        </nav>
-
-        {/* Burger button — vizibil doar pe mobile */}
+    <>
+      {/* Mobile overlay */}
+      {isOpen && (
         <button
-          className="md:hidden flex flex-col justify-center gap-1.25 w-8 h-8 bg-transparent border-none cursor-pointer p-0"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label={isOpen ? 'Închide meniul' : 'Deschide meniul'}
-          aria-expanded={isOpen}
-        >
-          {/* Cele 3 linii ale burger-ului */}
-          <span className={`block h-[1.5px] bg-(--ink) transition-all duration-300 origin-center ${isOpen ? 'rotate-45 translate-y-[6.5px] w-6' : 'w-6'}`} />
-          <span className={`block h-[1.5px] bg-(--ink) transition-all duration-300 ${isOpen ? 'opacity-0 w-6' : 'w-6'}`} />
-          <span className={`block h-[1.5px] bg-(--ink) transition-all duration-300 origin-center ${isOpen ? '-rotate-45 -translate-y-[6.5px] w-6' : 'w-6'}`} />
-        </button>
+          type="button"
+          className="fixed inset-0 z-60 bg-void/60 backdrop-blur-md md:hidden animate-[fadeOverlay_0.35s_ease-out_both]"
+          aria-label="Închide meniul"
+          onClick={closeMenu}
+        />
+      )}
 
-      </div>
+      <header className="fixed top-0 left-0 right-0 z-70 pointer-events-none pt-6 px-6">
+        <div className="max-w-7xl mx-auto relative pointer-events-auto">
+          <div
+            className={[
+              'nav-agency flex items-center justify-between gap-4 transition-all duration-500',
+              scrolled
+                ? 'shadow-agency-hover -translate-y-1.25'
+                : 'shadow-none',
+            ].join(' ')}
+          >
+            <Link
+              href="/"
+              className="text-2xl font-black text-text-navy tracking-tighter no-underline shrink-0 pl-2 transition-all duration-300 hover:text-primary-blue"
+            >
+              Birou<span className="text-primary-blue">.</span>
+            </Link>
 
-      {/* ── Meniu mobil — apare sub bara principală ── */}
-      <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
-        inert={!isOpen}
-      >
-        <nav className="border-t border-(--rule) bg-white">
-          <ul className="list-none max-w-6xl mx-auto px-6 py-4 flex flex-col gap-0">
-            {navLinks.map((item) => (
-              <li key={item} className="border-b border-(--rule-lt) last:border-b-0">
-                <Link
-                  href={`#${item.toLowerCase().replace(' ', '-')}`}
-                  onClick={closeMenu}
-                  className="nav-link text-sm text-(--ink-3) hover:text-(--ink) transition-colors no-underline"
-                >
-                  {item}
-                </Link>
-              </li>
-            ))}
-            <li className="pt-4">
+            <nav aria-label="Navigare principală" className="hidden md:flex items-center gap-6">
+              <ul className="flex items-center gap-2 list-none m-0 p-0">
+                {navLinks.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className="px-4 py-2 text-sm font-bold text-text-muted hover:text-text-navy transition-colors no-underline uppercase tracking-widest">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
               <Link
                 href="#contact"
-                onClick={closeMenu}
-                className="block text-center text-sm font-semibold bg-(--ink) text-white px-5 py-3 hover:bg-(--ink-2) transition-colors no-underline"
+                className="btn-agency-primary py-3 px-8 text-xs uppercase tracking-[0.2em] bg-primary-blue! text-white! hover:bg-slate-900! transition-all shadow-lg"
               >
-                Solicită ofertă
+                Solicită o discuție
               </Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
+            </nav>
 
-    </header>
+            <button
+              type="button"
+              className="md:hidden flex flex-col justify-center gap-1.5 w-12 h-12 rounded-full items-center bg-slate-50 border-none cursor-pointer p-0 shrink-0 transition-all hover:bg-slate-100"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label={isOpen ? 'Închide meniul' : 'Deschide meniul'}
+              aria-expanded={isOpen}
+            >
+              <span
+                className={`block h-0.5 bg-text-navy rounded-full transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-2 w-6' : 'w-6'}`}
+              />
+              <span className={`block h-0.5 bg-text-navy rounded-full transition-all duration-300 ${isOpen ? 'opacity-0 w-6' : 'w-6'}`} />
+              <span
+                className={`block h-0.5 bg-text-navy rounded-full transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-2 w-6' : 'w-6'}`}
+              />
+            </button>
+          </div>
+
+          {/* Mobile sheet */}
+          <div
+            className={`md:hidden overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              isOpen ? 'max-h-125 opacity-100 mt-6' : 'max-h-0 opacity-0 mt-0 pointer-events-none'
+            }`}
+          >
+            <nav
+              className="rounded-[2.5rem] border-2 border-slate-100 bg-white shadow-agency-hover p-4"
+              aria-label="Navigare mobilă"
+            >
+              <ul className="list-none m-0 p-0 flex flex-col gap-2">
+                {navLinks.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={closeMenu}
+                      className="block rounded-2xl px-6 py-5 text-xl font-black text-text-navy hover:text-primary-blue hover:bg-slate-50 transition-all no-underline"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+                <li className="p-2 pt-6">
+                  <Link
+                    href="#contact"
+                    onClick={closeMenu}
+                    className="btn-agency-primary flex items-center justify-center text-sm uppercase tracking-widest py-6 w-full"
+                  >
+                    Solicită ofertă
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </header>
+    </>
   )
 }

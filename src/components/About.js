@@ -26,7 +26,7 @@ const principles = [
     number: '04',
     title: 'Expertiză certificată',
     description:
-      'Consilieri autorizați CECCAR și CAFR, cu experiență în relația cu ANAF și alte instituții.',
+      'Consilieri autorizați CECCAR și CCF - Camera Consultanților Fiscali, cu experiență în relația cu ANAF și alte instituții.',
   },
 ]
 
@@ -34,7 +34,7 @@ export default function About() {
   const sectionRef = useRef(null)
 
   useEffect(() => {
-    const elements = sectionRef.current?.querySelectorAll('.reveal-item')
+    const elements = sectionRef.current?.querySelectorAll('.reveal-on-scroll')
     if (!elements) return
     const observer = new IntersectionObserver(
       (entries) => {
@@ -52,61 +52,44 @@ export default function About() {
   }, [])
 
   return (
-    <section
-      id="about"
-      ref={sectionRef}
-      className="relative py-20 md:py-28 bg-(--navy) text-white overflow-hidden"
-    >
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.12]"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 10% 20%, rgba(235,135,85,0.25) 0%, transparent 42%)',
-        }}
-        aria-hidden
-      />
-
-      <div className="relative max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] gap-14 lg:gap-20 items-start">
-        <div className="reveal-item">
-          <p className="text-[11px] font-semibold tracking-[0.28em] uppercase text-(--accent) mb-5">
-            — Despre noi
-          </p>
-          <h2 className="font-serif font-normal text-[clamp(1.75rem,3.8vw,2.6rem)] leading-[1.15] text-white mb-8">
-            Un birou contabil cu{' '}
-            <em className="not-italic text-(--accent)" style={{ fontStyle: 'italic' }}>
-              standarde ridicate
-            </em>
-          </h2>
-          <div className="space-y-4 text-[15px] text-(--muted) leading-relaxed mb-8">
-            <p>
-              Biroul Contabil este o firmă de specialitate din București care oferă servicii integrate de
-              contabilitate, fiscalitate și consultanță pentru IMM-uri, PFA-uri și companii mari.
-            </p>
-            <p>
-              Prioritatea noastră este protecția intereselor tale — prin cunoaștere aprofundată a legislației,
-              comunicare transparentă și soluții adaptate fiecărui profil de activitate.
-            </p>
+    <section id="about" ref={sectionRef} className="py-24 bg-base overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center mb-32">
+          <div className="reveal-on-scroll">
+            <div className="pill-badge mb-8">Povestea Noastră</div>
+            <h2 className="text-[clamp(3rem,8vw,5.5rem)] text-text-navy leading-[0.9] tracking-tight mb-12">
+              Partenerul tău <br />
+              <span className="text-accent-orange">de încredere.</span>
+            </h2>
+            <div className="space-y-8 text-2xl text-text-muted leading-snug font-medium">
+              <p>
+                Biroul Contabil transformă complexitatea fiscală în claritate strategică. Suntem o echipă de experți dedicați succesului tău.
+              </p>
+              <p>
+                Utilizăm tehnologie de ultimă oră pentru a-ți oferi o imagine fidelă și în timp real asupra afacerii tale.
+              </p>
+            </div>
+            <div className="mt-16">
+              <Link href="#contact" className="btn-agency-primary text-xl">
+                Află mai multe
+              </Link>
+            </div>
           </div>
-          <Link href="#contact" className="link-accent text-(--accent) text-sm font-semibold no-underline inline-flex items-center gap-1">
-            Descoperă echipa noastră <span aria-hidden>→</span>
-          </Link>
-        </div>
-
-        <div className="reveal-item space-y-0 border-t border-white/10" style={{ transitionDelay: '100ms' }}>
-          {principles.map((p) => (
-            <div
-              key={p.number}
-              className="grid grid-cols-[auto_1fr] gap-5 md:gap-8 py-7 border-b border-white/10 last:border-b-0"
-            >
-              <span className="font-sans text-[2rem] md:text-[2.35rem] font-semibold text-white/[0.12] leading-none tabular-nums pt-1">
-                {p.number}
-              </span>
-              <div>
-                <h3 className="text-[16px] font-semibold text-white mb-2">{p.title}</h3>
-                <p className="text-[14px] md:text-[15px] text-(--muted) leading-relaxed">{p.description}</p>
+          
+          <div className="reveal-on-scroll relative [animation-delay:0.2s]">
+            <div className="absolute inset-0 bg-primary-blue/5 rounded-3xl rotate-3" />
+            <div className="relative bg-white border-2 border-slate-100 p-12 rounded-3xl shadow-agency">
+              <div className="grid grid-cols-2 gap-8">
+                {principles.map((p, idx) => (
+                  <div key={p.number} className="space-y-4">
+                    <span className="text-4xl font-black text-primary-blue/10">{p.number}</span>
+                    <h3 className="text-xl font-extrabold text-text-navy leading-tight">{p.title}</h3>
+                    <p className="text-base leading-relaxed">{p.description}</p>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </section>

@@ -5,45 +5,43 @@ import Link from 'next/link'
 export default function CtaBand() {
   return (
     <section
-      className="relative text-white py-20 md:py-28 overflow-hidden"
+      className="relative text-white py-20 overflow-hidden bg-slate-900"
       aria-labelledby="cta-heading"
     >
-      <div className="absolute inset-0 bg-grid-fine" aria-hidden />
-      <div
-        className="absolute inset-0 bg-gradient-to-b from-[#1e3f73]/35 via-[#1a3866]/45 to-[#152d52]/55"
-        aria-hidden
-      />
-      <div className="relative max-w-3xl mx-auto px-6 text-center">
-        <p className="text-[11px] font-semibold tracking-[0.35em] uppercase text-(--accent) mb-6">
-          Hai să colaborăm
-        </p>
+      <div className="absolute top-0 right-0 w-[30%] h-full bg-primary-blue/10 skew-x-[-20deg] translate-x-20" />
+      <div className="relative max-w-7xl mx-auto px-6 flex flex-col items-center text-center">
+        <div className="pill-badge bg-white/5 text-white/70 border border-white/10 mb-8 reveal-on-scroll text-[10px]! tracking-[0.3em]!">
+          CONTACTEAZĂ-NE
+        </div>
         <h2
           id="cta-heading"
-          className="font-serif text-[clamp(1.85rem,4.5vw,2.75rem)] leading-[1.15] font-normal text-white mb-6"
+          className="text-[clamp(2rem,5vw,3.5rem)] leading-tight font-black text-white mb-10 reveal-on-scroll [animation-delay:0.1s]"
         >
-          Gata să{' '}
-          <em className="not-italic text-(--accent)" style={{ fontStyle: 'italic' }}>
-            protejăm
-          </em>{' '}
-          afacerea ta?
+          Ești gata să <br />
+          <span className="text-primary-blue">evoluăm împreună?</span>
         </h2>
-        <p className="text-[15px] text-(--muted-2) leading-relaxed mb-10 max-w-xl mx-auto">
-          Solicită o consultație gratuită și descoperă cum Biroul Contabil poate gestiona toate obligațiile
-          fiscale ale firmei tale.
-        </p>
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4">
+        
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-8 reveal-on-scroll [animation-delay:0.2s]">
           <Link
             href="#contact"
-            className="btn-accent inline-flex justify-center text-sm font-semibold bg-(--accent) text-(--navy-deep) px-8 py-3.5 rounded-md no-underline"
+            className="btn-agency-primary bg-primary-blue! text-white! hover:bg-white! hover:text-slate-900! px-12 py-4 shadow-2xl transition-all duration-300"
           >
-            Solicită consultație gratuită
+            Solicită Ofertă
           </Link>
           <a
-            href="tel:+40725316318"
-            className="inline-flex justify-center text-sm font-semibold px-8 py-3.5 rounded-md border border-white/35 text-white/95 hover:bg-white/10 transition-colors no-underline"
+            href="tel:+40722802121"
+            className="text-xl font-bold border-b-2 border-primary-blue/30 hover:border-primary-blue transition-all duration-300 pb-1"
           >
-            +40 725.316.318
+            0722 802 121
           </a>
+        </div>
+      </div>
+
+      {/* Very Thin & Subtle Marquee Strip */}
+      <div className="absolute bottom-0 left-0 w-full py-2 bg-white/5 border-t border-white/5 opacity-30 pointer-events-none select-none">
+        <div className="marquee-content text-[10px]! font-bold! tracking-[0.4em]! text-white uppercase">
+          <span className="marquee-item">EXCELENȚĂ • INTEGRITATE • PROFESIONALISM •</span>
+          <span className="marquee-item">EXCELENȚĂ • INTEGRITATE • PROFESIONALISM •</span>
         </div>
       </div>
     </section>

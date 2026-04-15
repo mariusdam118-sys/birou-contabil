@@ -1,119 +1,191 @@
 @import "tailwindcss";
 
 @theme {
-  --animate-fade-up: fadeUp 0.6s ease both;
+  /* Vibrant Agency Animations */
+  --animate-fade-up: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-reveal: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-marquee: marquee 30s linear infinite;
 
   @keyframes fadeUp {
-    0%   { opacity: 0; transform: translateY(16px); }
+    0%   { opacity: 0; transform: translateY(40px); }
     100% { opacity: 1; transform: translateY(0); }
   }
+
+  @keyframes reveal {
+    0%   { clip-path: inset(100% 0 0 0); transform: translateY(20px); }
+    100% { clip-path: inset(0% 0 0 0); transform: translateY(0); }
+  }
+
+  @keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Vibrant Digital Agency Palette */
+  --color-base: #ffffff;
+  --color-base-off: #fafafa;
+  
+  --color-primary-blue: #0055ff;
+  --color-accent-mustard: #eab308;
+  --color-accent-orange: #f97316;
+  
+  --color-text-navy: #0f172a;
+  --color-text-muted: #64748b;
+
+  --shadow-agency: 0 4px 20px rgba(15, 23, 42, 0.05);
+  --shadow-agency-hover: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
 
 :root {
-  --ink:      #1A1A18;
-  --ink-2:    #3A3A36;
-  --ink-3:    #6A6A64;
-  --ink-4:    #9A9A92;
-  --rule:     #DDDDD8;
-  --rule-lt:  #EDEDEA;
-  --bg:       #FFFFFF;
-  --bg-2:     #F8F8F6;
-  --warm:     #C8A96E;
+  --ink: var(--color-text-navy);
+  --ink-muted: var(--color-text-muted);
+  --rule: #e2e8f0;
+  --surface: var(--color-base);
+  color-scheme: light;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-base);
+}
 
 body {
-  font-family: var(--font-sans);
-  color: var(--ink);
-  background: var(--bg);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  color: var(--color-text-navy);
+  background-color: var(--color-base);
   -webkit-font-smoothing: antialiased;
-  font-size: 16px;       
-  line-height: 1.7;      
+  font-size: 16px;
+  line-height: 1.6;
 }
 
+/* Typography Overrides */
 h1, h2, h3, h4 {
-  font-family: var(--font-serif);
+  font-family: var(--font-inter), sans-serif; /* McShannock uses bold sans-serif */
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
 }
 
-.svc-card {
+/* Modern Agency Elements */
+.pill-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1.25rem;
+  background: var(--color-accent-mustard);
+  color: var(--color-text-navy);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.btn-agency-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2.5rem;
+  background: var(--color-primary-blue);
+  color: #fff;
+  border-radius: 9999px;
+  font-weight: 700;
+  transition: all 0.3s ease-in-out;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-agency-primary:hover {
+  background: var(--color-accent-orange);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(249, 115, 22, 0.25);
+}
+
+.btn-agency-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2.5rem;
+  background: transparent;
+  color: var(--color-text-navy);
+  border: 2px solid var(--color-text-navy);
+  border-radius: 9999px;
+  font-weight: 700;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-agency-secondary:hover {
+  background: var(--color-text-navy);
+  color: #fff;
+}
+
+/* Bento Box Grid */
+.bento-card {
+  background: var(--color-base);
+  border: 2px solid #f1f5f9;
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+  position: relative;
+}
+
+.bento-card:hover {
+  border-color: var(--color-primary-blue);
+  box-shadow: var(--shadow-agency-hover);
+  transform: translateY(-4px);
+}
+
+/* Marquee Styles */
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--color-primary-blue);
+  color: #fff;
+  padding: 1.5rem 0;
+}
+
+.marquee-content {
+  display: inline-block;
+  animation: marquee 40s linear infinite;
+  font-size: 4rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.marquee-item {
+  display: inline-block;
+  padding-right: 4rem;
+}
+
+/* Scroll Animations */
+.reveal-on-scroll {
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.svc-card.visible {
+.reveal-on-scroll.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-
-.btn-dark {
-  position: relative;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-}
-.btn-dark:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-.btn-dark:active {
-  transform: translateY(0px);
-  box-shadow: none;
+/* Nav Styling */
+.nav-agency {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid #f1f5f9;
+  border-radius: 9999px;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
 }
 
-
-.btn-outline {
-  position: relative;
-  overflow: hidden;
-  transition: color 0.3s ease, border-color 0.3s ease;
-  color: var(--ink); 
-}
-.btn-outline::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--ink);
-  transform: translateX(-101%);
-  transition: transform 0.3s ease;
-  z-index: 0;
-}
-.btn-outline:hover::before {
-  transform: translateX(0);
-}
-.btn-outline:hover {
-  color: white !important;
-  border-color: var(--ink);
-}
-.btn-outline span {
-  position: relative;
-  z-index: 1;
-}
-
-.nav-link {
-  position: relative;
-  padding-bottom: 2px;
-}
-.nav-link::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 0;
-  height: 1px;
-  background: var(--ink);
-  transition: width 0.25s ease;
-}
-.nav-link:hover::after {
-  width: 100%;
-}
-
-
-.link-warm {
-  text-decoration: underline;
-  text-decoration-color: var(--rule);
-  text-underline-offset: 3px;
-  transition: text-decoration-color 0.2s ease;
-}
-.link-warm:hover {
-  text-decoration-color: var(--warm);
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
