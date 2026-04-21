@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, Suspense } from 'react'
-import { useSearchParams, notFound } from 'next/navigation'
+import { useState, Suspense, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabase } from '@/lib/supabase'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { 
@@ -12,29 +13,123 @@ import {
   Settings, 
   ShieldCheck, 
   Database,
-  Circle
+  Circle,
+  LogOut
 } from 'lucide-react'
 
 function AdminContent() {
-  const searchParams = useSearchParams()
-  const access = searchParams.get('access')
-
-  // Stealth Gate: Page looks like a 404 unless the secret param is present
-  if (access !== 'topsecret') {
-    return notFound()
-  }
+  const router = useRouter()
+  const [user, setUser] = useState(null)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [authLoading, setAuthLoading] = useState(true)
 
   // Local state for UI toggles (Non-persistent/Database-free)
   const [maintenanceMode, setMaintenanceMode] = useState(false)
   const [publicSignups, setPublicSignups] = useState(true)
+  const [clients, setClients] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const mockClients = [
-    { id: 1, name: 'Quantum Logistics S.A.', service: 'Audit Anual', status: 'Validat', color: 'text-emerald-500' },
-    { id: 2, name: 'PFA Ionescu Maria', service: 'Consultanță Fiscală', status: 'În Lucru', color: 'text-amber-500' },
-    { id: 3, name: 'TechFlow Startups SRL', service: 'Înființare Firmă', status: 'Preluat', color: 'text-blue-500' },
-    { id: 4, name: 'Construct Balkan Grup', service: 'Declarații TVA', status: 'Urgent', color: 'text-rose-500' },
-    { id: 5, name: 'Eco-Friendly Solutions', service: 'Salarizare ReviSal', status: 'Finalizat', color: 'text-emerald-500' },
-  ]
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      setUser(session?.user ?? null)
+      setAuthLoading(false)
+    }
+    checkUser()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  useEffect(() => {
+    if (!authLoading && user) {
+    fetchClients()
+    }
+  }, [authLoading, user])
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) {
+      alert(`Eroare de acces: ${error.message}`)
+    }
+  }
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.push('/')
+  }
+
+  const fetchClients = async () => {
+    try {
+      const res = await fetch('/api/admin/messages')
+      const data = await res.json()
+      setClients(data)
+    } catch (err) {
+      console.error("Fetch error:", err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const updateStatus = async (id, currentStatus) => {
+    const nextStatus = currentStatus === 'Nou' ? 'În Lucru' : 'Finalizat'
+    await fetch('/api/admin/messages', {
+      method: 'PATCH',
+      body: JSON.stringify({ id, status: nextStatus })
+    })
+    fetchClients()
+  }
+
+  const deleteClient = async (id) => {
+    if (confirm('Ștergi definitiv această înregistrare?')) {
+      await fetch(`/api/admin/messages?id=${id}`, { method: 'DELETE' })
+      fetchClients()
+    }
+  }
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-base flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-primary-blue border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-base flex flex-col items-center justify-center px-6">
+        <div className="max-w-md w-full bento-card p-12">
+          <div className="flex items-center gap-3 mb-8 text-[10px] font-black uppercase tracking-[0.3em] text-text-muted/40">
+            <ShieldCheck size={14} className="text-primary-blue" />
+            <span className="text-primary-blue">Secure Terminal Login</span>
+          </div>
+          <h2 className="text-3xl font-black text-text-navy mb-10 tracking-tighter leading-none">Autentificare <br/><span className="text-primary-blue">Management.</span></h2>
+          
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div>
+              <label className="block text-xs font-black uppercase tracking-widest text-text-muted/60 mb-2">Email Admin</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-6 py-4 outline-none focus:border-primary-blue transition-all font-bold text-text-navy" placeholder="admin@biroucontabil.ro" required />
+            </div>
+            <div>
+              <label className="block text-xs font-black uppercase tracking-widest text-text-muted/60 mb-2">Parolă Sistem</label>
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-6 py-4 outline-none focus:border-primary-blue transition-all font-bold text-text-navy" placeholder="••••••••" required />
+            </div>
+            <button type="submit" className="btn-agency-primary w-full py-5 text-sm uppercase tracking-[0.2em] shadow-xl hover:shadow-primary-blue/20">
+              Acces Terminal
+            </button>
+          </form>
+        </div>
+        <button onClick={() => router.push('/')} className="mt-12 text-[10px] font-black uppercase tracking-widest text-text-muted/40 hover:text-primary-blue transition-colors">
+          ← Revenire la site
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-base text-text-navy font-sans selection:bg-primary-blue/10">
@@ -48,7 +143,13 @@ function AdminContent() {
           <span className="text-slate-200">/</span>
           <span>Node: BC-BUC-01</span>
           <span className="text-slate-200">/</span>
-          <span className="text-accent-orange animate-pulse">Terminal Active</span>
+          <button 
+            onClick={handleLogout}
+            className="text-accent-orange hover:text-text-navy transition-colors flex items-center gap-2 group"
+          >
+            <span className="animate-pulse">Terminal Active</span>
+            <LogOut size={12} className="group-hover:translate-x-0.5 transition-transform" />
+          </button>
         </div>
 
         {/* Section: Win Cards (Stats) */}
@@ -90,19 +191,24 @@ function AdminContent() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
-                    {mockClients.map((client) => (
+                    {loading ? (
+                      <tr><td colSpan="4" className="p-10 text-center animate-pulse">Se încarcă datele...</td></tr>
+                    ) : clients.map((client) => (
                       <tr key={client.id} className="hover:bg-primary-blue/5 transition-colors group">
                         <td className="px-10 py-6 text-[16px] font-extrabold text-text-navy">{client.name}</td>
                         <td className="px-10 py-6 text-[15px] text-text-muted font-medium">{client.service}</td>
                         <td className="px-10 py-6">
-                          <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${client.color.replace('emerald', 'primary-blue').replace('amber', 'accent-mustard').replace('blue', 'primary-blue').replace('rose', 'accent-orange')}`}>
+                          <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${client.status === 'Nou' ? 'text-accent-orange' : 'text-primary-blue'}`}>
                             <Circle size={8} fill="currentColor" />
                             {client.status}
                           </div>
                         </td>
-                        <td className="px-10 py-6">
-                          <button className="text-slate-200 hover:text-primary-blue transition-colors">
-                            <MoreVertical size={20} />
+                        <td className="px-10 py-6 flex gap-4">
+                          <button onClick={() => updateStatus(client.id, client.status)} className="text-slate-300 hover:text-primary-blue transition-colors uppercase text-[10px] font-black">
+                            Update
+                          </button>
+                          <button onClick={() => deleteClient(client.id)} className="text-slate-300 hover:text-accent-orange transition-colors uppercase text-[10px] font-black">
+                            Șterge
                           </button>
                         </td>
                       </tr>
@@ -157,7 +263,7 @@ function AdminContent() {
             <div className="p-8 border-2 border-dashed border-slate-100 rounded-3xl bg-slate-50/30">
               <h4 className="text-[11px] font-black text-text-muted/40 uppercase tracking-[0.3em] mb-4">Admin Memo:</h4>
               <p className="text-sm italic text-text-muted/70 leading-relaxed font-medium">
-                Toate modificările sunt temporare (Sesiune locală). Integrarea cu baza de date este dezactivată pentru modul demo.
+                Sesiune live activă. Toate modificările de status sunt salvate în baza de date Supabase.
               </p>
             </div>
           </div>
